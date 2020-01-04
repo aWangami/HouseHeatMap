@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <title>房价热力图</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style type="text/css">
+        ul, li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            float: left;
+        }
+
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑";
+        }
+
+        #main {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        #nav {
+            width: 180px;
+            flex-direction: column;
+            background: #fafafa;
+        }
+
+        #qrcode {
+            width: 180px;
+            height: 180px;
+        }
+
+        #logo {
+            font-size: 20px;
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #cityList {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .cityItem {
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+
+        .select {
+            color: #ffffff;
+            background: rgba(36, 119, 251, 1);
+            border-bottom: 0.5px solid rgba(62, 187, 243, 0.8);
+        }
+
+        .default {
+            color: rgba(36, 119, 251, 1);
+            background: #f0f0f0;
+            border-bottom: 0.5px solid rgba(208, 208, 208, 0.8);
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // 奈何jQuery不熟练呀 //
+            $('.cityItem').click(function (event) {
+                var current = $(this);
+                var list = $('.cityItem');
+                for (var i = 0; i < list.length; i++) {
+                    $(list[i]).addClass('default');
+                }
+                current.removeClass('default');
+                current.addClass('select');
+                $('#map').attr('src', 'map.html?city=' + current.data()['id']);
+            })
+        });
+    </script>
+</head>
+<body>
+<div id="main">
+    <div id="nav">
+        <div id="logo">房价热力图</div>
+        <ul id="cityList">
+            <li class="cityItem select" data-id="bj">北京</li>
+            <li class="cityItem default" data-id="hz">杭州</li>
+            <li class="cityItem default" data-id="sh">上海</li>
+            <li class="cityItem default" data-id="sz">苏州</li>
+            <li class="cityItem default" data-id="tj">天津</li>
+            <li class="cityItem default" data-id="nj">南京</li>
+            <li class="cityItem default" data-id="wx">无锡</li>
+            <li class="cityItem default" data-id="ty">太原</li>
+            <!--
+            <li class="cityItem default" data-id="nc">南昌</li>
+            <li class="cityItem default" data-id="cd">成都</li>
+            <li class="cityItem default" data-id="cs">长沙</li>
+            <li class="cityItem default" data-id="nn">南宁</li>
+            <li class="cityItem default" data-id="qd">青岛</li>
+            <li class="cityItem default" data-id="zz">郑州</li>
+            -->
+        </ul>
+        <div>
+            <img id="qrcode" src="images/qrcode.jpg">
+            <div style="text-align: center">欢迎扫码关注</div>
+        </div>
+    </div>
+    <div id="container">
+        <iframe scrolling="no" frameborder="0" id="map" src="map.html"/>
+    </div>
+</div>
+</body>
+</html>
