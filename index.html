@@ -43,13 +43,15 @@
 
         #nav {
             width: 180px;
+            display: flex;
             flex-direction: column;
+            justify-content: space-between;
             background: #fafafa;
         }
 
         #qrcode {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
         }
 
         #logo {
@@ -59,11 +61,14 @@
             padding-bottom: 10px;
         }
 
-        #cityList {
+        .cityList {
             display: flex;
-            flex: 1;
             flex-direction: column;
             width: 100%;
+        }
+
+        #author {
+            height: 180px;
         }
 
         .cityItem {
@@ -83,6 +88,10 @@
             color: rgba(36, 119, 251, 1);
             background: #f0f0f0;
             border-bottom: 0.5px solid rgba(208, 208, 208, 0.8);
+        }
+
+        .itemSmall {
+            border-left: 0.5px solid rgba(208, 208, 208, 0.8);
         }
     </style>
     <script type="text/javascript">
@@ -104,32 +113,36 @@
 <body>
 <div id="main">
     <div id="nav">
-        <div id="logo">房价热力图</div>
-        <ul id="cityList">
-            <li class="cityItem select" data-id="bj">北京</li>
-            <li class="cityItem default" data-id="hz">杭州</li>
-            <li class="cityItem default" data-id="sh">上海</li>
-            <li class="cityItem default" data-id="sz">苏州</li>
-            <li class="cityItem default" data-id="tj">天津</li>
-            <li class="cityItem default" data-id="nj">南京</li>
-            <li class="cityItem default" data-id="wx">无锡</li>
-            <li class="cityItem default" data-id="ty">太原</li>
-            <!--
-            <li class="cityItem default" data-id="nc">南昌</li>
-            <li class="cityItem default" data-id="cd">成都</li>
-            <li class="cityItem default" data-id="cs">长沙</li>
-            <li class="cityItem default" data-id="nn">南宁</li>
-            <li class="cityItem default" data-id="qd">青岛</li>
-            <li class="cityItem default" data-id="zz">郑州</li>
-            -->
-        </ul>
         <div>
+            <div id="logo">房价热力图</div>
+            <ul class="cityList">
+                <li class="cityItem select" data-id="hz">杭州</li>
+                <li class="cityItem default" data-id="bj">北京</li>
+                <li class="cityItem default" data-id="sh">上海</li>
+                <li class="cityItem default" data-id="sz">苏州</li>
+            </ul>
+            <ul class="cityList" style="width: 50%">
+                <li class="cityItem default" data-id="tj">天津</li>
+                <li class="cityItem default" data-id="nj">南京</li>
+                <li class="cityItem default" data-id="wx">无锡</li>
+                <li class="cityItem default" data-id="ty">太原</li>
+                <li class="cityItem default" data-id="nc">南昌</li>
+            </ul>
+            <ul class="cityList" style="float: right; width: 50%">
+                <li class="cityItem default itemSmall" data-id="cd">成都</li>
+                <li class="cityItem default itemSmall" data-id="cs">长沙</li>
+                <li class="cityItem default itemSmall" data-id="nn">南宁</li>
+                <li class="cityItem default itemSmall" data-id="qd">青岛</li>
+                <li class="cityItem default itemSmall" data-id="zz">郑州</li>
+            </ul>
+        </div>
+        <div id="author">
             <img id="qrcode" src="images/qrcode.jpg">
-            <div style="text-align: center">欢迎扫码关注</div>
+            <!-- <div style="text-align: center">欢迎扫码关注</div> -->
         </div>
     </div>
     <div id="container">
-        <iframe scrolling="no" frameborder="0" id="map" src="map.html"/>
+        <iframe scrolling="no" frameborder="0" id="map" src="map.html?city=hz"/>
     </div>
 </div>
 </body>
