@@ -27,6 +27,28 @@
             font-family: "微软雅黑";
         }
 
+        #root {
+            height: 100%;
+            width: 100%;
+        }
+
+        #top {
+            background: rgba(208, 208, 208, 0.9);
+            border-top-left-radius: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            /* height: 89px; */
+            z-index: 9999;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            color: black;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         #container {
             height: 100%;
             width: 100%;
@@ -34,7 +56,12 @@
     </style>
 </head>
 <body>
-<div id="container"></div>
+<div id="root">
+    <div id="top">
+        <div>Tip: 右键可以切换房价和房源 | Code By aWang</div>
+    </div>
+    <div id="container"></div>
+</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -43,6 +70,26 @@
     map.centerAndZoom(point, 12); // 初始化地图，设置中心点坐标和地图级别
     map.enableScrollWheelZoom(); // 允许滚轮缩放
     map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}));
+
+    var menu = new BMap.ContextMenu();
+    var txtMenuItem = [
+        {
+            text: '房源热力图',
+            callback: function () {
+                loadHeatmap('count', true)
+            }
+        },
+        {
+            text: '房价热力图',
+            callback: function () {
+                loadHeatmap('price', true)
+            }
+        }
+    ];
+    for (var i = 0; i < txtMenuItem.length; i++) {
+        menu.addItem(new BMap.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback, 100));
+    }
+    map.addContextMenu(menu);
 
     if (!isSupportCanvas()) {
         alert('热力图目前只支持有Canvas支持的浏览器')
@@ -97,12 +144,33 @@
         return !!(elem.getContext && elem.getContext('2d'));
     }
 
-    function loadHeatmap() {
-        $.get("data/hz.json", function (data, status) {
+    function getQueryParam() {
+        var params = {};
+        var tmpArr = location.href.split('?');
+        if (tmpArr.length === 2) {
+            tmpArr = tmpArr[1].split("&");
+            for (var index = 0; index < tmpArr.length; index++) {
+                var subArr = tmpArr[index].split('=');
+                if (subArr.length === 2) {
+                    params[subArr[0]] = subArr[1];
+                } else {
+                    params[subArr[0]] = ''
+                }
+            }
+        }
+        return params;
+    }
+
+    function loadHeatmap(type, isSwitch) {
+        var params = getQueryParam();
+        var city = params.city ? params.city : 'hz';
+        $.get("data/" + city + "_" + type + ".json", function (data, status) {
             if (status) {
-                // 设置中心点 //
-                var point = new BMap.Point(data.x, data.y);
-                map.centerAndZoom(point, 12);
+                if (!isSwitch) {
+                    // 设置中心点 //
+                    var point = new BMap.Point(data.x, data.y);
+                    map.centerAndZoom(point, 12);
+                }
                 // 设置 dataset //
                 var points = [];
                 heatmapOverlay.setDataSet({data: data.points, max: 100});
@@ -115,6 +183,7 @@
 
     closeHeatmap();
     $(document).ready(function () {
-        loadHeatmap();
+        var params = getQueryParam();
+        loadHeatmap(params.type ? params.type : 'price', false);
     });
 </script>
