@@ -71,6 +71,22 @@
     map.enableScrollWheelZoom(); // 允许滚轮缩放
     map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}));
 
+    var opts = {
+        position: point, // 指定文本标注所在的地理位置
+        offset: new BMap.Size(-110, 10) // 设置文本偏移量
+    };
+    var tipLabel = new BMap.Label("热力图加载需要时间，请稍候...", opts); // 创建文本标注对象
+    tipLabel.setStyle({
+        color: "blue",
+        fontSize: "15px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        height: "30px",
+        lineHeight: "30px",
+        fontFamily: "微软雅黑"
+    });
+    map.addOverlay(tipLabel);
+
     var menu = new BMap.ContextMenu();
     var txtMenuItem = [
         {
@@ -165,6 +181,7 @@
         var params = getQueryParam();
         var city = params.city ? params.city : 'hz';
         $.get("data/" + city + "_" + type + ".json", function (data, status) {
+            map.removeOverlay(tipLabel);
             if (status) {
                 if (!isSwitch) {
                     // 设置中心点 //
